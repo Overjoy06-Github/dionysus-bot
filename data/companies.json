@@ -2,53 +2,53 @@
     "Apple": {
         "name": "Apple",
         "total_shares": 1450,
-        "available_shares": 80,
-        "share_price": 1.0,
+        "available_shares": 725,
+        "share_price": 358.86,
         "owner": {
             "id": 544776631672242176,
             "name": "overjoy06",
-            "shares": 870
+            "shares": 725
         },
-        "investors": {
-            "544776631672242176": {
-                "shares": 500,
-                "name": "overjoy06"
-            }
-        },
-        "volatility": 0.15,
+        "investors": {},
         "created_at": "2025-07-06T11:08:53.459745"
     },
     "Microsoft": {
         "name": "Microsoft",
         "total_shares": 2900,
-        "available_shares": 1160,
-        "share_price": 1.0,
+        "available_shares": 1450,
+        "share_price": 213.55,
         "owner": {
             "id": 544776631672242176,
             "name": "overjoy06",
-            "shares": 1740
+            "shares": 1450
         },
         "investors": {},
-        "volatility": 0.15,
         "created_at": "2025-07-06T11:10:01.992717"
     },
     "Linus Tech Tips": {
         "name": "Linus Tech Tips",
         "total_shares": 1500,
-        "available_shares": 380,
-        "share_price": 1.0,
+        "available_shares": 600,
+        "share_price": 179.53,
         "owner": {
             "id": 544776631672242176,
             "name": "overjoy06",
             "shares": 900
         },
-        "investors": {
-            "544776631672242176": {
-                "shares": 220,
-                "name": "overjoy06"
-            }
-        },
-        "volatility": 0.15,
+        "investors": {},
         "created_at": "2025-07-06T11:40:05.294236"
+    },
+    "dionysus": {
+        "name": "dionysus",
+        "total_shares": 500,
+        "available_shares": 250,
+        "share_price": 98.36,
+        "owner": {
+            "id": 712957891665199134,
+            "name": "hentai_haven5264",
+            "shares": 250
+        },
+        "investors": {},
+        "created_at": "2025-07-06T22:54:59.478427"
     }
 }
