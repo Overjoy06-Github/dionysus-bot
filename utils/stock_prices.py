@@ -3,7 +3,7 @@ import asyncio
 import random
 import json
 
-async def get_random_stock_price():
+def get_random_stock_price():
     stock_tickers = [
         'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META',
         'TSLA', 'NVDA', 'JPM', 'V', 'WMT',
