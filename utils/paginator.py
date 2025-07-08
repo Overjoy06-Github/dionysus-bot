@@ -9,6 +9,21 @@ class AnimePaginator(discord.ui.View):
 
     def get_embed(self):
         anime = self.anime_list[self.index]
+        type_emojis = {
+            "TV": "📺",
+            "Movie": "🎬",
+            "OVA": "📀",
+            "ONA": "🌐",
+            "TV Special": "🎉",
+            "Special": "🎉",
+            "Music": "🎵",
+            "PV": "📣",
+            "CM": "📢",
+            "Unknown": "❓"
+        }
+        anime_type = anime['type']
+        emoji = type_emojis.get(anime_type, "❓")
+
         colors = [
             0x39FF14, 0xFF073A, 0xF5FF00, 0x04D9FF,
             0xBC13FE, 0xFF6EC7, 0xFF9933, 0x7DF9FF
@@ -17,8 +32,11 @@ class AnimePaginator(discord.ui.View):
             title=anime['title'],
             url=anime['anime_url'],
             color=random.choice(colors),
-            description=f"**Genres**:\n`{anime['genres']}`\n**Episodes**: `{anime['episodes']}`\n**Description:**\n```\n{anime['synopsis']}\n```"
+            description=f"**Description:**\n```\n{anime['synopsis']}\n```"
         )
+        embed.add_field(name="Genres", value=f"`{anime['genres']}`", inline=True)
+        embed.add_field(name="Episodes", value=f"`{anime['episodes']}`", inline=True)
+        embed.add_field(name="Type", value=f"`{emoji} {anime_type}`")
         if anime['image_url']:
             embed.set_image(url=anime['image_url'])
         embed.set_footer(text=f"{self.index+1} of {len(self.anime_list)}")
