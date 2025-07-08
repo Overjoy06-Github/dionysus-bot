@@ -2,9 +2,7 @@ from utils.economy_json import get_balance, update_balance
 from utils.stocks_prices import get_random_stock_price
 from discord.ext import commands
 from datetime import datetime
-import yfinance as yf
 import discord
-import random
 import json
 
 class Stocks(commands.Cog):
@@ -20,7 +18,7 @@ class Stocks(commands.Cog):
         with open(self.companies_file, "w") as f:
             json.dump(data, f, indent=4)
 
-    @commands.command(aliases=['createcompany', 'newcompany'])
+    @commands.command(aliases=['createcompany', 'newcompany', 'cc', 'incorporate'])
     async def create_company(self, ctx, *, args: str):
         try:
             parts = args.rsplit(' ', 1)
@@ -118,9 +116,7 @@ class Stocks(commands.Cog):
         
         if not company_data:
             return await ctx.send(f"❌ No company found with name: {name}")
-        
-        market_cap = company_data['total_shares'] * company_data['share_price']
-        
+                
         embed = discord.Embed(
             title=f"🏢 {company_data['name']} Company Report",
             color=0x7289da
@@ -167,7 +163,7 @@ class Stocks(commands.Cog):
         
         await ctx.send(embed=embed)
 
-    @commands.command()
+    @commands.command(aliases=['invest', 'purchase'])
     async def buy(self, ctx, *, args: str = None):
         if not args:
             return await ctx.send("❌ Usage: `!buy [company name] [shares]`")
@@ -407,31 +403,46 @@ class Stocks(commands.Cog):
         
         await ctx.send(embed=embed)
 
-    async def get_random_stock_price():
-        stock_tickers = [
-            'AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 
-            'TSLA', 'NVDA', 'JPM', 'V', 'WMT',
-            'DIS', 'NFLX', 'PYPL', 'ADBE', 'INTC'
-        ]
-        
-        random_ticker = random.choice(stock_tickers)
-        
+    @commands.command(aliases=['rc', 'rebrand', 'rename'])
+    async def renamecompany(self, ctx, *, args: str):
         try:
-            stock = yf.Ticker(random_ticker)
-            
-            current_data = stock.history(period='1d')
-            
-            if not current_data.empty:
-                price = current_data['Close'].iloc[-1]
-                print(f"Current price of {random_ticker}: ${price:.2f}")
-                return price
-            else:
-                print(f"No data available for {random_ticker}")
-                return 1.0
-                
-        except Exception as e:
-            print(f"Error fetching data for {random_ticker}: {str(e)}")
-            return 1.0
+            parts = [p.strip('"') for p in args.split('" "')]
+            if len(parts) != 2:
+                raise ValueError
+            old_name = parts[0].strip('"')
+            new_name = parts[1].strip('"')
+        except:
+            return await ctx.send("❌ Format: `!renamecompany \"Current Name\" \"New Name\"`")
+
+        if not old_name or not new_name:
+            return await ctx.send("❌ Names cannot be empty!")
+        if len(new_name) > 50:
+            return await ctx.send("❌ New name too long (max 50 characters)")
+
+        companies = self.load_companies()
         
+        company_data = None
+        company_key = None
+        for name, data in companies.items():
+            if name.lower() == old_name.lower():
+                company_data = data
+                company_key = name
+                break
+        
+        if not company_data:
+            return await ctx.send(f"❌ Company not found: {old_name}")
+        
+        if str(company_data['owner']['id']) != str(ctx.author.id):
+            return await ctx.send("❌ You don't own this company!")
+        
+        if new_name.lower() in [c.lower() for c in companies.keys()]:
+            return await ctx.send("❌ A company with that name already exists!")
+        
+        companies[new_name] = companies.pop(company_key)
+        companies[new_name]['name'] = new_name
+        self.save_companies(companies)
+        
+        await ctx.send(f"✅ Successfully renamed **{company_key}** to **{new_name}**")
+
 async def setup(bot):
     await bot.add_cog(Stocks(bot))
