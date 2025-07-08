@@ -1,6 +1,5 @@
-import json
-import os
 from pathlib import Path
+import json
 
 ECONOMY_FILE = "data/economy.json"
 
